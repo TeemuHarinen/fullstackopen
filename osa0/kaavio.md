@@ -4,5 +4,5 @@ sequenceDiagram
     participant browser
     participant server
     
-    browser->server;
+    browser->>server:
 ```
