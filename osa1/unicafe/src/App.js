@@ -108,44 +108,4 @@ const App = () => {
   )
 }
 
-/*
-const Statistics = (props) => {
-  // TODO:
-  
-  if (props.total !== 0) {
-    return (
-      <div>
-        <p>{props.good}</p>
-        <p>neutral {props.neutral}</p>
-        <p>bad {props.bad}</p>
-        <p>all {props.total}</p>
-        <p>average {props.average}</p>
-        <p>positive {props.positive} %</p>
-    </div>
-  )
-}
-return (<p>no feedback given</p>)
-
-return (
-    <div>
-      <Header text={headerFeedback}/>
-      <button onClick={HandleGood}> good </button>
-      <button onClick={HandleNeutral}> neutral </button>
-      <button onClick={HandleBad}> bad </button>
-      <Header text={headerStatistics} />
-      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive={avgGood}/>
-    </div>
-
-    <StatisticLine text="bad" value={props.bad} />
-    <StatisticLine text="total" value={props.total} />
-    <StatisticLine text="average" value={props.average} />
-    <StatisticLine text="positive" value={props.positive} symbol="%"/>
-
-    <tr><StatisticLine text="neutral" value={props.neutral}/></tr>
-            <tr><StatisticLine text="bad" value={props.bad}/> </tr>
-            <tr><StatisticLine text="total" value={props.total}/></tr>
-            <tr><StatisticLine text="average" value={props.average}/></tr>
-            <tr><StatisticLine text="positive" value={props.positive} symbol="%"/></tr>
-*/
-
 export default App
