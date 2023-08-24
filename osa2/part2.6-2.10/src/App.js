@@ -94,6 +94,9 @@ const App = () => {
         })
         .catch(() => {
           setErrorMessage(`${updatedPerson.name} has been removed already!`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         }
         )
       }
@@ -170,57 +173,3 @@ const App = () => {
 }
 
 export default App
-
-/*
-const addPerson = (event) => {
-  event.preventDefault()
-  if (newName === '') {
-    alert('Please enter a name')
-  } else {
-
-  const personObject = {
-    name: newName,
-    number: newNumber
-  }
-  
-  const newPerson = persons.find(person => person.name === newName)
-  if (newPerson) {
-    if (window.confirm(`${newName} already added to phonebook, want to replace it with a new one?`))
-    {
-
-      const updatedPerson = {...newPerson, number: newNumber}
-
-      phoneService
-      .update(newPerson.id, updatedPerson).then(returnedPerson => {
-        setPersons(persons.map(person => person.id !== newPerson.id ? person : updatedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
-        setSuccessMessage(`${newName} added to phonebook`)
-        setTimeout(() => {setSuccessMessage(null)}, 5000)
-      
-  } else {
-    phoneService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-  })
-  }
-}
-}
-}
-
-.then(updatedPerson => {
-          setPersons(persons.map(person => person.id !== newPerson.id ? person : updatedPerson))
-          setNewName('')
-          setNewNumber('')
-          console.log('suorittuu')
-          setSuccessMessage(`${newName} added to phonebook`)
-          setTimeout(() => {
-            setSuccessMessage(null)
-          }, 5000)
-        }
-        )
-*/
