@@ -8,12 +8,13 @@ const Filter = ({filterName, handleFilterChange}) => {
   )
 }
 
-const Countries = ({countriesToShow, countries}) => {
+const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
+  
   if (countriesToShow.length > 10) {
     return 'Too many matches, specify another filter'
 
   } else if (countriesToShow.length <= 10 && countriesToShow.length > 1) {
-    return (<>{countriesToShow.map(country => <li key={country}> {country} </li>)}</>)
+    return (<>{countriesToShow.map(country => <li key={country}> {country} <button onClick={() => setCountriesToShow([country])}>show</button></li>)}</>)
 
   } else if (countriesToShow.length === 1) {
       const nameToFind = countriesToShow[0]
@@ -21,8 +22,6 @@ const Countries = ({countriesToShow, countries}) => {
       const c = country[0]
       const languages = Object.values(c.languages)
       const flag = c.flags.png
-      
-      console.log(flag)
       return (
         <>
           <h1> {c.name.common} </h1>
@@ -33,12 +32,10 @@ const Countries = ({countriesToShow, countries}) => {
             {languages.map(language => <li key={language}> {language} </li>)}
           </ul>
           <img src={flag} alt="country-flag"></img>
-
         </>
       )
-  }
 }
-
+}
 
 const App = () => {
 
@@ -51,7 +48,6 @@ const App = () => {
       .getAll()
       .then(data => {
         setCountries(data)
-
       })
   }
   useEffect(hook, [])
@@ -63,11 +59,12 @@ const App = () => {
     setCountriesToShow(tempCountries)
   }
 
+
   return (
     <div>
       <h2>Find countries</h2>
       <Filter filterName={filterName} handleFilterChange={handleFilterChange}></Filter>
-      <Countries countriesToShow={countriesToShow} countries={countries}>  </Countries>
+      <Countries countriesToShow={countriesToShow} countries={countries} setCountriesToShow={setCountriesToShow}> </Countries>
       
     </div>
   )
