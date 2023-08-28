@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import dataService from './services/dataHandler'
+import axios from 'axios'
 
 
 const Filter = ({filterName, handleFilterChange}) => {
@@ -8,7 +9,7 @@ const Filter = ({filterName, handleFilterChange}) => {
   )
 }
 
-const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
+const Countries = ({countriesToShow, countries, setCountriesToShow, setTemp, temp, setWind, wind, setIconUrl, iconUrl}) => {
   
   if (countriesToShow.length > 10) {
     return 'Too many matches, specify another filter'
@@ -17,13 +18,26 @@ const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
     return (<>{countriesToShow.map(country => <li key={country}> {country} <button onClick={() => setCountriesToShow([country])}>show</button></li>)}</>)
 
   } else if (countriesToShow.length === 1) {
+
       const nameToFind = countriesToShow[0]
       const country = countries.filter(country => country.name.common === nameToFind)
       const c = country[0]
       const languages = Object.values(c.languages)
       const flag = c.flags.png
-
+      const api_key = process.env.REACT_APP_API_KEY
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${c.capital}&appid=${api_key}`
+      const icon = `https://openweathermap.org/img/wn/${iconUrl}@2x.png`
       
+      axios
+        .get(url)
+        .then(response => {
+          const temp = response.data.main.temp-273.15
+          setTemp(Math.round(temp*100)/100)
+          const wind = response.data.wind.speed
+          setWind(wind)
+          const iconUrl = response.data.weather[0].icon
+          setIconUrl(iconUrl)
+        })
       
       return (
         <>
@@ -36,7 +50,9 @@ const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
           </ul>
           <img src={flag} alt="country-flag"></img>
           <h2> Weather in {c.capital}</h2>
-
+          <p>temperature {temp} Celcius</p>
+          <img src={icon} alt="weather-icon"></img>
+          <p>wind {wind} m/s</p>
         </>
       )
 }
@@ -47,6 +63,9 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [filterName, setFilterName] = useState('')
   const [countriesToShow, setCountriesToShow] = useState([])
+  const [temp, setTemp] = useState(null)
+  const [wind, setWind] = useState(null)
+  const [iconUrl, setIconUrl] = useState(null)
 
   const hook = () => {
     dataService
@@ -64,12 +83,12 @@ const App = () => {
     setCountriesToShow(tempCountries)
   }
 
-
   return (
     <div>
       <h2>Find countries</h2>
       <Filter filterName={filterName} handleFilterChange={handleFilterChange}></Filter>
-      <Countries countriesToShow={countriesToShow} countries={countries} setCountriesToShow={setCountriesToShow}> </Countries>
+      <Countries countriesToShow={countriesToShow} countries={countries} setCountriesToShow={setCountriesToShow}
+       setTemp={setTemp} temp={temp} wind={wind} setWind={setWind} setIconUrl={setIconUrl} iconUrl={iconUrl} ></Countries>
       
     </div>
   )
