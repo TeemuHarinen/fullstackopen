@@ -9,7 +9,7 @@ const Filter = ({filterName, handleFilterChange}) => {
   )
 }
 
-const Countries = ({countriesToShow, countries, setCountriesToShow, setTemp, temp, setWind, wind, setIconUrl, iconUrl}) => {
+const Countries = ({countriesToShow, countries, setCountriesToShow, setTemp, temp, setWind, wind, setIcon, icon}) => {
   
   if (countriesToShow.length > 10) {
     return 'Too many matches, specify another filter'
@@ -26,8 +26,7 @@ const Countries = ({countriesToShow, countries, setCountriesToShow, setTemp, tem
       const flag = c.flags.png
       const api_key = process.env.REACT_APP_API_KEY
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${c.capital}&appid=${api_key}`
-      const icon = `https://openweathermap.org/img/wn/${iconUrl}@2x.png`
-      
+
       axios
         .get(url)
         .then(response => {
@@ -36,7 +35,7 @@ const Countries = ({countriesToShow, countries, setCountriesToShow, setTemp, tem
           const wind = response.data.wind.speed
           setWind(wind)
           const iconUrl = response.data.weather[0].icon
-          setIconUrl(iconUrl)
+          setIcon(`https://openweathermap.org/img/wn/${iconUrl}@2x.png`)
         })
       
       return (
@@ -65,7 +64,7 @@ const App = () => {
   const [countriesToShow, setCountriesToShow] = useState([])
   const [temp, setTemp] = useState(null)
   const [wind, setWind] = useState(null)
-  const [iconUrl, setIconUrl] = useState(null)
+  const [icon, setIcon] = useState(null)
 
   const hook = () => {
     dataService
@@ -88,7 +87,7 @@ const App = () => {
       <h2>Find countries</h2>
       <Filter filterName={filterName} handleFilterChange={handleFilterChange}></Filter>
       <Countries countriesToShow={countriesToShow} countries={countries} setCountriesToShow={setCountriesToShow}
-       setTemp={setTemp} temp={temp} wind={wind} setWind={setWind} setIconUrl={setIconUrl} iconUrl={iconUrl} ></Countries>
+       setTemp={setTemp} temp={temp} wind={wind} setWind={setWind} setIcon={setIcon} icon={icon} ></Countries>
       
     </div>
   )
