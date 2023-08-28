@@ -22,6 +22,9 @@ const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
       const c = country[0]
       const languages = Object.values(c.languages)
       const flag = c.flags.png
+
+      
+      
       return (
         <>
           <h1> {c.name.common} </h1>
@@ -32,6 +35,8 @@ const Countries = ({countriesToShow, countries, setCountriesToShow}) => {
             {languages.map(language => <li key={language}> {language} </li>)}
           </ul>
           <img src={flag} alt="country-flag"></img>
+          <h2> Weather in {c.capital}</h2>
+
         </>
       )
 }
