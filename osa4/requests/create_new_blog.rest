@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlZW11IiwiaWQiOiI2NTA5YjU0YzdmZTg1MWVkMWU4YzU0ZWQiLCJpYXQiOjE2OTUxMzc1ODl9.7TGwgjp3r_8gzj8XPFMAGoG-xMe0Wj9lO03FIhoj9VA
 
 {
-    "title": "toimiiko124124",
+    "title": "toimiiko12412423565264",
     "author": "Teme",
     "url": "example.com",
-    "likes": "56"
+    "likes": "123414"
 }

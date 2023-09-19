@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 
 blogsRouter.get('/', async (request, response) => {
@@ -18,35 +19,45 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.post('/', async(request, response) => {
+blogsRouter.post('/', async(request, response, next) => {
   const body = request.body
-  if (body.userId !== undefined) {
-    let user = {}
-    try {
-      user = await User.findById(body.userId)
-
-      const blog = new Blog({
-        id: body.id,
-        title: body.title,
-        author: body.author,
-        url: body.url,
-        likes: body.likes || 0,
-        user: user.id,
-      })
-
-      if (blog.title && blog.url) {
-        const savedBlog = await blog.save()
-        user.blogs = user.blogs.concat(savedBlog._id)
-        await user.save()
-        response.status(201).json(savedBlog)
-      } else {
-        response.status(400).end()
-      }
-    } catch (err) {
-      response.status(400).json({ error: 'Invalid UserID' })
+  try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
     }
-  } else {
-    response.status(400).end('UserID is required')
+    console.log(decodedToken.username)
+    // userId ON NYT POIS LAITA TOKENIN MUKAAN ID
+    if (decodedToken.username !== undefined) {
+      let user = {}
+      try {
+        user = await User.findById(decodedToken.id)
+
+        const blog = new Blog({
+          id: body.id,
+          title: body.title,
+          author: body.author,
+          url: body.url,
+          likes: body.likes || 0,
+          user: user.id,
+        })
+
+        if (blog.title && blog.url) {
+          const savedBlog = await blog.save()
+          user.blogs = user.blogs.concat(savedBlog._id)
+          await user.save()
+          response.status(201).json(savedBlog)
+        } else {
+          response.status(400).end()
+        }
+      } catch (err) {
+        response.status(400).json({ error: 'Invalid UserID' })
+      }
+    } else {
+      response.status(400).end('username is required with token')
+    }
+  } catch (err) {
+    next(err)
   }
 }
 )
@@ -66,7 +77,7 @@ blogsRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes
   })
-  console.log(body)
+
   if (blog.title && blog.url) {
     await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     response.status(201).json(blog)
