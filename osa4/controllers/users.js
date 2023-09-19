@@ -10,10 +10,12 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
-
+  console.log(username)
   if (!password || !username) {
     response.status(400).json({ error: 'Username and password are required, minlength 3' })
 
+  } else if (await User.exists({ username: username })) {
+    response.status(400).json({ error: 'Username must be unique' })
   } else {
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -23,7 +25,6 @@ usersRouter.post('/', async (request, response) => {
       name,
       passwordHash,
     })
-
 
     try {
       const savedUser = await user.save()

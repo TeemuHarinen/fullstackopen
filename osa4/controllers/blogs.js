@@ -20,32 +20,33 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async(request, response) => {
   const body = request.body
-  let user = null
+  if (body.userId !== undefined) {
+    let user = {}
+    try {
+      user = await User.findById(body.userId)
 
-  try {
-    user = await User.findById(body.userId)
-  } catch (err) {
-    response.status(400).json({ error: 'Invalid UserID' })
-  }
+      const blog = new Blog({
+        id: body.id,
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes || 0,
+        user: user.id,
+      })
 
-  if (user !== null) {
-    const blog = new Blog({
-      id: body.id,
-      title: body.title,
-      author: body.author,
-      url: body.url,
-      likes: body.likes || 0,
-      user: user.id
-    })
-
-    if (blog.title && blog.url) {
-      const savedBlog = await blog.save()
-      user.blogs = user.blogs.concat(savedBlog._id)
-      await user.save()
-      response.status(201).json(savedBlog)
-    } else {
-      response.status(400).end()
+      if (blog.title && blog.url) {
+        const savedBlog = await blog.save()
+        user.blogs = user.blogs.concat(savedBlog._id)
+        await user.save()
+        response.status(201).json(savedBlog)
+      } else {
+        response.status(400).end()
+      }
+    } catch (err) {
+      response.status(400).json({ error: 'Invalid UserID' })
     }
+  } else {
+    response.status(400).end('UserID is required')
   }
 }
 )

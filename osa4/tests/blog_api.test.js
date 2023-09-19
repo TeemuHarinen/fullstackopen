@@ -43,13 +43,22 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of a new blog', () => {
+    beforeEach(async () => {
+      await User.deleteMany({})
+      await User.insertMany(helper.initialUsers)
+    })
+
+
     test('a valid blog can be added', async () => {
+      const usersAtStart = await helper.usersInDb()
+      const exampleUser = usersAtStart[0]
+
       const newBlog = {
         title: 'Test Title',
         author: 'Test Author',
         url: 'http://testurl.com',
         likes: 999,
-        userId: '6509861ee5ef2246f39a67da'
+        userId: exampleUser.id
       }
       await api
         .post('/api/blogs')
@@ -65,12 +74,14 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('blog likes set to 0 if not defined', async () => {
+      const usersAtStart = await helper.usersInDb()
+      const exampleUser = usersAtStart[0]
 
       const newBlog = {
         title: 'Test Likes',
         author: 'Test Author',
         url: 'http://testurl.com',
-        userId: '6509861ee5ef2246f39a67da'
+        userId: exampleUser.id
       }
 
       await api
@@ -122,7 +133,6 @@ describe('when there is initially some blogs saved', () => {
       const noteToModify = response.body[0]
 
       const newData = { ...noteToModify, title: 'Success', likes: 555 }
-      console.log(newData)
       await api
         .put(`/api/blogs/${noteToModify.id}`)
         .send(newData)
@@ -184,13 +194,12 @@ describe('when there is already one user in db', () => {
         .post('/api/users')
         .send(newUser)
         .expect(400)
-        .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('expected `username` to be unique')
-
+      expect(result.body.error).toContain('Username must be unique')
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
+
 })
 
 afterAll(async () => {
