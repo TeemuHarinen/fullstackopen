@@ -160,6 +160,19 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('blog with missing critical fields returns 400 Bad Request', async () => {
+      const usersAtStart = await helper.usersInDb()
+      const user = {
+        username: usersAtStart[0].username,
+        password: helper.initialUsers[0].password
+      }
+      // Logging in
+      const request =
+      await api
+        .post('/api/login')
+        .send(user)
+
+      const token = request.body.token
+
       const newBlog = {
         author: 'Test Author',
         url: 'http://testurl.com'
@@ -167,6 +180,7 @@ describe('when there is initially some blogs saved', () => {
       await api
         .post('/api/blogs')
         .send(newBlog)
+        .set('Authorization', `Bearer ${token}`)
         .expect(400)
     })
   })
