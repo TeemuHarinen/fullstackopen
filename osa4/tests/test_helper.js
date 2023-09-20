@@ -65,12 +65,12 @@ const initialUsers = [
     password: '12345'
   },
   {
-    username : 'Vede',
+    username : 'Vede2',
     name: 'Veeti Engblom',
     password: '12345'
   },
   {
-    username : 'Sevu',
+    username : 'Sevu3',
     name: 'Severi Salonen',
     password: '12345'
   }

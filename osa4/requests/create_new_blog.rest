@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlZW11IiwiaWQiOiI2NTA5YjU0YzdmZTg1MWVkMWU4YzU0ZWQiLCJpYXQiOjE2OTUxMzc1ODl9.7TGwgjp3r_8gzj8XPFMAGoG-xMe0Wj9lO03FIhoj9VA
+Authorization: Bearer eyJhGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlZW11IiwiaWQiOiI2NTA5YjU0YzdmZTg1MWVkMWU4YzU0ZWQiLCJpYXQiOjE2OTUxMzc1ODl9.7TGwgjp3r_8gzj8XPFMAGoG-xMe0Wj9lO03FIhoj9VA
 
 {
     "title": "toimiiko12412423565264",
     "author": "Teme",
     "url": "example.com",
-    "likes": "123414"
+    "likes": "123414",
+    "userID": "650b1514c70125aa0dfa514a"
 }
