@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNhc3N1IiwiaWQiOiI2NTBiMWUyNzIwNzg1NjFmZmQyMmM0YmQiLCJpYXQiOjE2OTUyMjc3MTAsImV4cCI6MTY5NTIzMTMxMH0.EUjabUQsKnvcm8nDBhPtllopMIEm5WPKmdltsdcFcuA
 
 {
-
+    "title": "daymn",
     "author": "Sassu",
-    "likes": "10000000",
+    "likes": "1000",
     "url": "http://sassublogi.com"
 }
