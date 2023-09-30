@@ -15,11 +15,10 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const blogFormRef = useRef()
-
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => a.likes > b.likes ? 1 : -1) ) // Sorts blogs based on likes
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const App = () => {
 
   const Notification = ({ message, isError }) => {
     if (message === null) {return null}
-  
+
     const errorType = isError ? 'errorMessage' : 'successMessage'
     return (
       <div className={errorType}>
@@ -46,14 +45,13 @@ const App = () => {
     try {
       await blogService.create(newBlog)
       blogService.getAll()
-        .then(blogs => setBlogs( blogs ))
+        .then(blogs => setBlogs( blogs.sort((a, b) => a.likes > b.likes ? 1 : -1) ))
       blogFormRef.current.toggleVisibility()
       setSuccessMessage(`Blog created successfully: ${newBlog.title}`)
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
     } catch (error) {
-      console.log(error)
       setErrorMessage(error.response.data)
       setTimeout(() => {
         setErrorMessage(null)
@@ -63,16 +61,15 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-      console.log('logged in with', username, password, user.token)
     } catch (err) {
       setErrorMessage(err.response.data.error)
       setTimeout(() => {
@@ -93,7 +90,7 @@ const App = () => {
       <Notification message={errorMessage} isError={true} />
 
       {!user && <Togglable buttonLabel="Log in">
-        <LoginForm 
+        <LoginForm
           handleSubmit={handleLogin}
           handleUsernameChange={({ target }) => setUsername(target.value)}
           handlePasswordChange={({ target }) => setPassword(target.value)}
