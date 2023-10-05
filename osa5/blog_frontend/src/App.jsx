@@ -59,6 +59,14 @@ const App = () => {
     }
   }
 
+  const updateLike = async (blog) => {
+    const newData = { ...blog, likes: blog.likes+1 }
+    await blogService.update(blog.id, newData)
+
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs.sort((a, b) => a.likes > b.likes ? 1 : -1)) // Sorts blogs by likes
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -99,7 +107,7 @@ const App = () => {
         />
       </Togglable> }
       {user && <h4> {user.name} logged in <button onClick={handleLogout}> logout </button> </h4>}
-      {user && blogs.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} user={user}></Blog>)}
+      {user && blogs.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} updateLike={updateLike} user={user}></Blog>)}
       {user && <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm
           createBlog={createBlog}

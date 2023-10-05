@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNhc3N1IiwiaWQiOiI2NTBiMWUyNzIwNzg1NjFmZmQyMmM0YmQiLCJpYXQiOjE2OTUyMjc3MTAsImV4cCI6MTY5NTIzMTMxMH0.EUjabUQsKnvcm8nDBhPtllopMIEm5WPKmdltsdcFcuA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWQiOiI2NTFlZTA5NDBjM2UzYzM1NTFmNTNjNDEiLCJpYXQiOjE2OTY1MjI0MDcsImV4cCI6MTY5NjUyNjAwN30.ORfeP1Vwomu-425wO1Irz7kViS-HCqkVlEKdjpt_d0I
 
 {
-    "title": "daymn",
-    "author": "Sassu",
-    "likes": "1000",
+    "title": "Blog test",
+    "author": "John",
+    "likes": "1234",
     "url": "http://sassublogi.co"
 }
