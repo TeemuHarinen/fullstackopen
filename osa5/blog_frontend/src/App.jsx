@@ -17,7 +17,7 @@ const App = () => {
   const blogFormRef = useRef()
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a, b) => a.likes > b.likes ? 1 : -1) ) // Sorts blogs based on likes
+      setBlogs( blogs.sort((a, b) => a.likes < b.likes ? 1 : -1) ) // Sorts blogs based on likes
     )
   }, [])
 
@@ -64,7 +64,7 @@ const App = () => {
     await blogService.update(blog.id, newData)
 
     const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs.sort((a, b) => a.likes > b.likes ? 1 : -1)) // Sorts blogs by likes
+    setBlogs(updatedBlogs.sort((a, b) => a.likes < b.likes ? 1 : -1)) // Sorts blogs by likes
   }
 
   const handleLogin = async (event) => {
@@ -90,7 +90,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     window.location.reload()
   }
-
   return (
     <div>
       <h2>Blogs</h2>
@@ -107,7 +106,7 @@ const App = () => {
         />
       </Togglable> }
       {user && <h4> {user.name} logged in <button onClick={handleLogout}> logout </button> </h4>}
-      {user && blogs.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} updateLike={updateLike} user={user}></Blog>)}
+      {user && blogs.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} updateLike={updateLike} user={user} className='blog'></Blog>) }
       {user && <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm
           createBlog={createBlog}
