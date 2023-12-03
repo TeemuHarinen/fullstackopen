@@ -1,1 +1,2 @@
-# Repository for Helsinki University's Full Stack Open course
+# Fullstackopen
+Repository for Helsinki University's Full Stack Open course
