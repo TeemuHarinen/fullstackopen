@@ -18,7 +18,7 @@ const App = () => {
       type: 'OK'
     })
   }
-
+  
   const bad = () => {
     store.dispatch({
       type: 'BAD'
