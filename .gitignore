@@ -1,6 +1,6 @@
 node_modules
 frontend
-DS_Store
+**/.DS_Store
 .env
 fly.toml
 Dockerfile
