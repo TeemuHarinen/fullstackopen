@@ -19,6 +19,7 @@ const AnecdoteFrom = () => {
         <input name="anecdote"/>
         <button type="submit">create</button>
       </form>
+      <br/>
     </>
   )
 }
