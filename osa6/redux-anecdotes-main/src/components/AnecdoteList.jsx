@@ -5,27 +5,29 @@ import { voteNotification } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const filter = useSelector(state => state.filter)
-  const anecdotes = useSelector(state => state.anecdotes)
-  const filteredArr = anecdotes.filter(anecdote => 
-    anecdote.content.toLowerCase().includes(filter.toLowerCase())
-  )
-  
-  const handleVote = (id, content) => {
-    console.log(id)
-    dispatch(increaseVote(id))
-    dispatch(voteNotification(content))
+  const anecdotes = useSelector(state => {
+    if (filter) {
+      return state.anecdotes.filter(anecdote => 
+        anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+      }
+      return state.anecdotes
+    })
+
+  const handleVote = (anecdote) => {
+    dispatch(increaseVote(anecdote))
+    dispatch(voteNotification(`You voted:  ${anecdote.content}`, 5))
   }
 
   return (
     <>
-      {filteredArr.map(anecdote =>
+      {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote.id, anecdote.content)}>vote</button>
+            <button onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
       )}
