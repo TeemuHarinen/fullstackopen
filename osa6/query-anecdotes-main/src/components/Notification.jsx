@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import NotificationContext from '../NotificationContext'
+import React from 'react';
 
 const Notification = ({ notification }) => {
   const style = {
@@ -8,8 +7,6 @@ const Notification = ({ notification }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
-  
 
   if (!notification) return null;
 

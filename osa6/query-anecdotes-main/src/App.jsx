@@ -36,6 +36,9 @@ const App = () => {
   const handleVote = (anecdote) => {
     updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes+1})
     dispatchNotification({ type: 'SET_NOTIFICATION', data: `you voted '${anecdote.content}'` })
+    setTimeout(() => {
+      dispatchNotification({ type: 'HIDE_NOTIFICATION' })
+    }, 5000)
   }
 
   const result = useQuery({
@@ -60,7 +63,7 @@ const App = () => {
       <h3>Anecdote app</h3>
       <Notification notification={notification}/>
       <AnecdoteForm dispatch={dispatchNotification}/>
-    
+
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
