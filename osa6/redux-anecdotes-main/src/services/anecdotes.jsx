@@ -5,13 +5,13 @@ const getAll = async () => {
   const response = await axios.get(baseUrl)
   return response.data.sort((a, b) => b.votes - a.votes)
 }
-// test
+
 const createNew = async (content) => {
   const obj = { content, votes: 0 }
   const response = await axios.post(baseUrl, obj)
   return response.data
 }
-
+// test
 const update = async (id, newObject) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObject)
   return response.data
