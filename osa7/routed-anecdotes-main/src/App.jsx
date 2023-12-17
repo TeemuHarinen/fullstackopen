@@ -18,9 +18,7 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = ({ anecdotes }) => {
-  const id = useParams().id
-  const anecdote = anecdotes.find(a => a.id === Number(id))
+const Anecdote = ({ anecdote }) => {
   return (
     <div>
       <h2>{anecdote.content} by {anecdote.author}</h2>
@@ -133,11 +131,18 @@ const App = () => {
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
+  
   const padding = {
     padding: 5
   }
+
+  const match = useMatch('/anecdotes/:id')
+  const anecdote = match
+    ? anecdotes.find(a => a.id === Number(match.params.id))
+    : null
+
   return (
-    <Router>
+    <div>
       <h1>Software anecdotes</h1>
       <div>
         <Link style={padding} to="/">anecdotes</Link>
@@ -149,14 +154,14 @@ const App = () => {
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
         <Route path="/create" element={<CreateNew addNew={addNew} setNotification={setNotification} />}></Route>
         <Route path="/about" element={<About />}></Route>
-        <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
+        <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote} />}></Route>
       </Routes>
 
       <div>
         <br />
         <Footer />
       </div>
-    </Router>
+    </div>
   )
 }
  
