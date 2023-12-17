@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { useField } from './hooks'
 import {
-  BrowserRouter as Router,
-  Routes, Route, Link, useParams, useNavigate, useMatch
+  Routes, Route, Link, useNavigate, useMatch
 } from 'react-router-dom'
 
 
@@ -51,24 +51,32 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
+  const { reset: resetContent, field: content} = useField('text')
+  const { reset: resetAuthor, field: author} = useField('text')
+  const { reset: resetInfo, field: info} = useField('text')
+  
   const navigate = useNavigate()
+
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     navigate('/')
-    props.setNotification(`a new anecdote ${content} created`)
+    props.setNotification(`a new anecdote ${content.value} created`)
     setTimeout(() => {
       props.setNotification(null);
     }, 5000);
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -77,17 +85,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
@@ -131,7 +140,7 @@ const App = () => {
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
-  
+
   const padding = {
     padding: 5
   }
@@ -186,4 +195,25 @@ const Menu = () => {
     </div>
   )
 }
+
+return (
+    <div>
+      <h2>create a new anecdote</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          content
+          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+        </div>
+        <div>
+          author
+          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+        </div>
+        <div>
+          url for more info
+          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+        </div>
+        <button>create</button>
+      </form>
+    </div>
+  )
 */
