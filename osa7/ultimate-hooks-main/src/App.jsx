@@ -57,7 +57,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>notes</h2>
       <form onSubmit={handleNoteSubmit}>
         <input {...content} />
