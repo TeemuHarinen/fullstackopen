@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 const blogReducer = createSlice({
   name: "blogs",
   initialState: [],
-  reducers: { // more reducers could be used but backend already handles most actions
+  reducers: {
+    // more reducers could be used but backend already handles most actions
     setBlogs: (state, action) => {
       return action.payload
     },

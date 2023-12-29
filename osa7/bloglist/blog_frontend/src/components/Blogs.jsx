@@ -1,13 +1,14 @@
-
 import React, { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import BlogForm from "./BlogForm"
 import Blog from "./Blog"
 import Togglable from "./Togglable"
 import { setBlogs } from "../reducers/blogReducer"
-import { setNotification, clearNotification } from "../reducers/notificationReducer"
+import {
+  setNotification,
+  clearNotification,
+} from "../reducers/notificationReducer"
 import blogService from "../services/blogs"
-
 
 const Blogs = () => {
   const dispatch = useDispatch()
@@ -60,4 +61,3 @@ const Blogs = () => {
 }
 
 export default Blogs
-

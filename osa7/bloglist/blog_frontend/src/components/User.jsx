@@ -1,6 +1,5 @@
-
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React from "react"
+import { useSelector } from "react-redux"
 
 const User = ({ blogs }) => {
   const user = useSelector((state) => state.loggedUser)

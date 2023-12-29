@@ -15,14 +15,9 @@ import {
 } from "./reducers/notificationReducer"
 import { setBlogs } from "./reducers/blogReducer"
 import { setUser, clearUser } from "./reducers/loggedUserReducer"
-import {
-  Routes,
-  Route,
-  Link,
-  useMatch,
-} from "react-router-dom"
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, Navbar, Nav } from "react-bootstrap"
+import { Routes, Route, Link, useMatch } from "react-router-dom"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Navbar, Nav, Button } from "react-bootstrap"
 
 const App = () => {
   const dispatch = useDispatch()
@@ -42,10 +37,11 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    blogService.getAll().then(
-      (blogs) =>
-        dispatch(setBlogs(blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1)))), 
-    )
+    blogService
+      .getAll()
+      .then((blogs) =>
+        dispatch(setBlogs(blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1)))),
+      )
   }, [dispatch])
 
   const handleLogin = async (event) => {
@@ -90,23 +86,25 @@ const App = () => {
       <Notification></Notification>
       {user && (
         <div>
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav>
-              <Nav.Link as="span">
-                <Link style={padding} to="/">
-                  blogs
-                </Link>
-              </Nav.Link>
-              <Nav.Link as="span">
-                <Link style={padding} to="/users">
-                  users
-                </Link>
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav>
+                <Nav.Link as="span">
+                  <Link style={padding} to="/">
+                    blogs
+                  </Link>
+                </Nav.Link>
+                <Nav.Link as="span">
+                  <Link style={padding} to="/users">
+                    users
+                  </Link>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <br />
+            {user.name} logged in <Button onClick={handleLogout}>logout</Button>
         </div>
       )}
       <h2>Blogs</h2>
