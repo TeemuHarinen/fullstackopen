@@ -1,7 +1,10 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { setBlogs } from "../reducers/blogReducer"
 import blogService from "../services/blogs"
 
-const Blog = ({ blog, setBlogs, user, updateLike }) => {
+const Blog = ({ blog, user, updateLike }) => {
+  const dispatch = useDispatch()
   const [showFull, setShowFull] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -19,7 +22,7 @@ const Blog = ({ blog, setBlogs, user, updateLike }) => {
     if (window.confirm(`Remove blog ${blogToDelete.title}?`)) {
       await blogService.remove(blogToDelete.id)
       const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs)
+      dispatch(setBlogs(updatedBlogs))
     }
   }
   if (showFull === false) {
