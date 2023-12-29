@@ -32,6 +32,7 @@ if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', testingRouter)
   console.log('Running test api')
 }
+
 app.use(middleware.requestLogger)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

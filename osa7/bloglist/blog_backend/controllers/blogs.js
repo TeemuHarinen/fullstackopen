@@ -53,6 +53,23 @@ blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async
 }
 )
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const body = request.body
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    if (body.comment) {
+      blog.comments = blog.comments.concat(body.comment)
+      console.log(blog)
+      await blog.save()
+      response.status(201).json(blog)
+    } else {
+      response.status(400).end('Missing comment field')
+    }
+  } else {
+    response.status(404).end('Blog not found')
+  }
+})
+
 blogsRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (blog) {
@@ -73,7 +90,8 @@ blogsRouter.put('/:id', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    comments: body.comments
   })
 
   if (blog.title && blog.url) {

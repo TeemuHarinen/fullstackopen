@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react"
-import Blog from "./components/Blog"
+import { useState, useEffect } from "react"
+import Blogs from "./components/Blogs"
+import Users from "./components/Users"
+import User from "./components/User"
+import BlogSingle from "./components/BlogSingle"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 import LoginForm from "./components/LoginForm"
-import BlogForm from "./components/BlogForm"
 import Togglable from "./components/Togglable"
 import Notification from "./components/Notification"
 import { useSelector, useDispatch } from "react-redux"
@@ -14,115 +16,18 @@ import {
 import { setBlogs } from "./reducers/blogReducer"
 import { setUser, clearUser } from "./reducers/loggedUserReducer"
 import {
-  Routes, Route, Link, useNavigate, useMatch
-} from 'react-router-dom'
-
-const Blogs = () => {
-  const dispatch = useDispatch()
-  const blogs = useSelector((state) => state.blogs)
-  const blogFormRef = useRef()
-  const user = useSelector((state) => state.loggedUser)
-
-  const createBlog = async (newBlog) => {
-    try {
-      await blogService.create(newBlog)
-      blogService
-        .getAll()
-        .then((blogs) =>
-          dispatch(
-            setBlogs(blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1))),
-          ),
-        )
-      blogFormRef.current.toggleVisibility()
-      dispatch(
-        setNotification({
-          message: `Blog created successfully: ${newBlog.title}`,
-          type: "success",
-        }),
-      )
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 5000)
-    } catch (error) {
-      dispatch(setNotification({ message: error.response.data, type: "error" }))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 5000)
-    }
-  }
-
-  const updateLike = async (blog) => {
-    const newData = { ...blog, likes: blog.likes + 1 }
-    await blogService.update(blog.id, newData)
-
-    const updatedBlogs = await blogService.getAll()
-    dispatch(
-      setBlogs(updatedBlogs.sort((a, b) => (a.likes < b.likes ? 1 : -1))),
-    ) // Sorts blogs by likes
-  }
-
-  return (
-    <div>
-      {user &&
-        blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateLike={updateLike}
-            user={user}
-            className="blog"
-          ></Blog>
-        ))}
-      {user && (
-        <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-          <BlogForm createBlog={createBlog} />
-        </Togglable>
-      )}
-    </div>
-  )
-}
-
-const Users = () => {
-  const blogs = useSelector(state => state.blogs)
-  const user = useSelector(state => state.loggedUser)
-  const authors = blogs.map(blog => ({ name: blog.user.name, id: blog.user.id }))
-  const uniqueAuthors = authors.filter((author, index, self) =>
-  index === self.findIndex((a) => a.id === author.id))
-  console.log(blogs)
-  //<Link to={`/users/${blog.id}`}>
-  if (!user) return null
-  return (
-    <div>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {uniqueAuthors.map(author => (
-            <tr key={author.id}>
-              <td><Link to={`/users/${author.id}`}>{author.name}</Link></td>
-              <td>{blogs.filter(blog => blog.user.id === author.id).length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
-const User = ({ user }) => {
-  console.log(user)
-  return (
-    <div></div>
-  )
-}
+  Routes,
+  Route,
+  Link,
+  useMatch,
+} from "react-router-dom"
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Button, Navbar, Nav } from "react-bootstrap"
 
 const App = () => {
   const dispatch = useDispatch()
+  const match = useMatch("/users/:id")
+  const matchInd = useMatch("/blogs/:id")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const user = useSelector((state) => state.loggedUser)
@@ -139,7 +44,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(
       (blogs) =>
-        dispatch(setBlogs(blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1)))), // Sorts blogs based on likes
+        dispatch(setBlogs(blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1)))), 
     )
   }, [dispatch])
 
@@ -170,30 +75,42 @@ const App = () => {
   }
 
   const padding = {
-    padding: 5
+    padding: 5,
   }
 
-  const match = useMatch('/users/:id')
-  const foundUser = match
-    ? blogs.find(b => b.user.id === Number(match.params.id))
+  const matchedBlogs = match
+    ? blogs.filter((b) => b.user.id === match.params.id)
+    : null
+  const matchedBlog = matchInd
+    ? blogs.find((b) => b.id === matchInd.params.id)
     : null
 
   return (
-    <div>
-      <h2>Blogs</h2>
+    <div className="container">
       <Notification></Notification>
       {user && (
         <div>
-          <Link style={padding} to="/">blogs</Link>
-          <Link style={padding} to="/users">users</Link>
-          <h4>
-          {" "}
-          {user.name} logged in <button onClick={handleLogout}> logout </button>{" "}
-          </h4>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav>
+              <Nav.Link as="span">
+                <Link style={padding} to="/">
+                  blogs
+                </Link>
+              </Nav.Link>
+              <Nav.Link as="span">
+                <Link style={padding} to="/users">
+                  users
+                </Link>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
         </div>
-        )
-      }
-      
+      )}
+      <h2>Blogs</h2>
+      <br />
       {!user && (
         <Togglable buttonLabel="Log in">
           <LoginForm
@@ -205,11 +122,11 @@ const App = () => {
           />
         </Togglable>
       )}
-
       <Routes>
         <Route path="/" element={<Blogs></Blogs>}></Route>
         <Route path="/users" element={<Users></Users>}></Route>
-        <Route path="/users/:id" element={<User user={foundUser} />} />
+        <Route path="/users/:id" element={<User blogs={matchedBlogs} />} />
+        <Route path="/blogs/:id" element={<BlogSingle blog={matchedBlog} />} />
       </Routes>
     </div>
   )

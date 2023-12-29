@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setBlogs } from "../reducers/blogReducer"
 import blogService from "../services/blogs"
+import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
 
-const Blog = ({ blog, user, updateLike }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch()
-  const [showFull, setShowFull] = useState(false)
+  const user = useSelector((state) => state.loggedUser)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,18 +15,19 @@ const Blog = ({ blog, user, updateLike }) => {
     marginBottom: 5,
   }
 
-  const toggleFull = () => {
-    setShowFull(!showFull)
-  }
+  if (!blog || !user) return null
+  return (
+    <div style={blogStyle} className="blog">
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title} {blog.author}
+      </Link>
+    </div>
+  )
+}
+export default Blog
 
-  const removeBlog = async (blogToDelete) => {
-    if (window.confirm(`Remove blog ${blogToDelete.title}?`)) {
-      await blogService.remove(blogToDelete.id)
-      const updatedBlogs = await blogService.getAll()
-      dispatch(setBlogs(updatedBlogs))
-    }
-  }
-  if (showFull === false) {
+/*
+if (showFull === false) {
     return (
       <div style={blogStyle} className="blog">
         {blog.title} {blog.author}
@@ -38,7 +40,7 @@ const Blog = ({ blog, user, updateLike }) => {
   } else {
     return (
       <div style={blogStyle} className="fullBlog">
-        {blog.title}
+        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
         <button onClick={() => toggleFull()}> Hide </button> <br></br>
         {blog.url} <br></br>
         {blog.likes}{" "}
@@ -53,6 +55,11 @@ const Blog = ({ blog, user, updateLike }) => {
         )}
       </div>
     )
+    const removeBlog = async (blogToDelete) => {
+    if (window.confirm(`Remove blog ${blogToDelete.title}?`)) {
+      await blogService.remove(blogToDelete.id)
+      const updatedBlogs = await blogService.getAll()
+      dispatch(setBlogs(updatedBlogs))
+    }
   }
-}
-export default Blog
+*/
