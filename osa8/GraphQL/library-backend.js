@@ -156,6 +156,7 @@ const resolvers = {
       return book
     },
     editAuthor: (root, args) => {
+      console.log(args)
       if (authors.find(a => a.name === args.name)) {
         const updatedAuthor = {
           name: args.name,
