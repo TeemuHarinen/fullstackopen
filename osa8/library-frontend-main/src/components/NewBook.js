@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { CREATE_BOOK, EDIT_AUTHOR_BIRTHYEAR } from './queries'
+import { ALL_BOOKS, CREATE_BOOK, EDIT_AUTHOR_BIRTHYEAR } from './queries'
 import Select from 'react-select'
 
 
@@ -18,6 +18,7 @@ const NewBook = ({ show, setError, authors }) => {
   })
 
   const [ createBook ] = useMutation(CREATE_BOOK, {
+    refetchQueries: [ { query: ALL_BOOKS } ],
     onError: (error) => {
       const messages = error.graphQLErrors.map((error) => error.message).join('\n')
       setError(messages)
@@ -30,7 +31,6 @@ const NewBook = ({ show, setError, authors }) => {
       setError(messages)
     }
   })
-  // refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ] polling already added
 
   if (!show) {
     return null
@@ -39,8 +39,7 @@ const NewBook = ({ show, setError, authors }) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    createBook({  variables: { title, author, published, genres } })
-    console.log('add book...')
+    createBook({  variables: { title, author, published , genres } })
 
     setTitle('')
     setPublished('')
@@ -56,9 +55,8 @@ const NewBook = ({ show, setError, authors }) => {
 
   const updateAuthor = async (event) => {
     event.preventDefault()
-    console.log(selectedOption)
     editAuthor({ variables: { name: selectedOption.value, setBornTo: parseInt(born) } })
-    console.log('update author...')
+    console.log('Author birthyear updated with', selectedOption.value, born)
     setPublished('')
     setAuthor('')
   }

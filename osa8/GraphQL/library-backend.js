@@ -226,6 +226,7 @@ const resolvers = {
     },
 
     editAuthor: async (root, args, context) => {
+      console.log(args)
       const currentUser = context.currentUser
       if (!currentUser) {
         throw new GraphQLError('Not authenticated', {
@@ -269,8 +270,9 @@ const resolvers = {
       }
     },
     login: async (root, args) => {
+      console.log(args)
       const user = await User.findOne({ username: args.username })
-      
+      console.log(user)
       if (!user || args.password !== 'secret') {
         throw new GraphQLError('Wrong credentials', {
           extensions: {
@@ -283,7 +285,6 @@ const resolvers = {
         username: user.username,
         id: user._id,
       }
-
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     }
   }
