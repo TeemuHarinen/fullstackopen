@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client'
 
 const FavoriteList = ({ show, favoriteBooks }) => {
   const result = useQuery(ME)
-  console.log(result)
   if (!show) {
     return null
   }
