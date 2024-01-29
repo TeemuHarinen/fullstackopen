@@ -7,6 +7,7 @@ import toNewDiaryEntry from '../utils';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
+  console.log("GET /api/diaries");
   res.send(diaryService.getNonSensitiveEntries());
 });
 
@@ -21,6 +22,8 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  console.log("POST /api/diaries");
+  console.log(req.body);
   try {
     const newDiaryEntry = toNewDiaryEntry(req.body);
     const addedEntry = diaryService.addDiary(newDiaryEntry);
