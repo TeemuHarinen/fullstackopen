@@ -49,12 +49,14 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
         dateOfBirth: parseDate(object.dateOfBirth),
         gender: parseGender(object.gender),
         occupation: parseString(object.occupation),
-        ssn: parseString(object.ssn)
+        ssn: parseString(object.ssn),
+        entries: []
       };
 
     return newEntry;
   }
   throw new Error('Incorrect or missing object');
 };
+
 
 export default toNewPatientEntry;
